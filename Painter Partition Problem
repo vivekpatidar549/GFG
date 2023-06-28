@@ -1,0 +1,50 @@
+
+class Solution
+{
+  public:
+  
+  bool possiblepainter(int boards[] ,int k ,int n, long long mid){
+    long long int painter=1;
+    long long int sum=0;
+    for(int i=0;i<n;i++){
+        if(sum+boards[i]<=mid){
+            sum+=boards[i];
+        }
+        else{
+            painter ++;
+            if(painter>k||boards[i]>mid){
+                return false;
+            }
+            sum=0;
+            sum+= boards[i];
+        }
+    }
+    return true;
+}
+
+    long long minTime(int arr[], int n, int k)
+    {
+        // code here
+        // return minimum time
+    long long int start=0;
+    long long int end=0;
+    long long int ans=0;
+    for(int i=0;i<n;i++){
+        end=end+arr[i];
+    }
+    long long int mid=start+(end-start)/2;
+    while(start<=end){
+        if(possiblepainter(arr,k,n,mid)){
+            end=mid-1;
+            ans=mid;
+            
+        }
+        else{
+            start=mid+1;
+        }
+        mid=start+(end-start)/2;
+
+    }
+    return ans;
+    }
+};
