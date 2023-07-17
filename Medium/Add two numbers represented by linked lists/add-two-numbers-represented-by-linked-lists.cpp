@@ -44,8 +44,6 @@ void printList(Node* n)
 
 
 // } Driver Code Ends
-
-
 /* node for linked list:
 
 struct Node {
@@ -61,91 +59,80 @@ struct Node {
 
 class Solution
 {
-    struct Node* reverse(Node *head){
-        Node *prev=NULL;
-        Node * current=head;
-        while(current!=NULL){
-            Node* next = current->next;
-            current->next = prev;
-            prev = current;
-            current = next;
-            
-        }
-        return prev;
-        
-    }
-    
-    struct Node* add(struct Node* first, struct Node* second){
-        Node * ansHead=NULL;
-        Node * ansTail=NULL;
-        int carry=0;
-        int sum=0;
-        while(first!=NULL && second!=NULL){
-            sum=carry+first->data+second->data;
-            int digit= sum%10;
-            insertattail(ansHead,ansTail,digit);
-            carry=sum/10;
-            first=first->next;
-            second=second->next;
-            
-        }
-        while(first!=NULL){
-            sum=carry+first->data;
-           int digit= sum%10;
-            insertattail(ansHead,ansTail,digit);
-            carry=sum/10;
-            first=first->next;
-            
-        }
-        while(second!=NULL){
-            sum=carry+second->data;
-          int  digit= sum%10;
-            insertattail(ansHead,ansTail,digit);
-            carry=sum/10;
-            second=second->next;
-        }
-        while(carry!=0){
-            int sum=carry;
-            int digit= sum%10;
-            insertattail(ansHead,ansTail,digit);
-            carry=sum/10;
-            
-            
-        }
-        return ansHead;
-        
-    }
-    
-    void insertattail(struct Node* &head, struct Node* &tail,int digit){
-        Node * temp= new Node(digit);
-        if(head==NULL){
-           head=temp;
-           tail=temp;
-        }
-        else{
-            tail->next=temp;
-            tail=temp;
-        }
-        
-        
-    }
     public:
+    Node * reverse(Node* head){
+    Node* prev=NULL;
+    while(head){
+        Node * nextpoint= head->next;
+        head->next = prev;
+        prev=head;
+        head=nextpoint;
+    }
+    return prev;
+}
+Node* sumpart(Node* head1, Node* head2) {
+    Node* sol = new Node(0);
+    Node* ans = sol;
+    int carry = 0;
+
+    while (head1 != NULL && head2 != NULL) {
+        int sum = (carry + head1->data + head2->data) ;
+        carry = sum/ 10;
+        sum%=10;
+        ans->next = new Node(sum);
+        ans = ans->next;
+        head1 = head1->next;
+        head2 = head2->next;
+        
+    }
+
+    while (head1 != NULL) {
+        int sum = (carry + head1->data) ;
+        carry = sum/ 10;
+        sum%=10;
+        ans->next = new Node(sum);
+        ans = ans->next;
+        head1 = head1->next;
+    }
+
+    while (head2 != NULL) {
+        int sum = (carry + head2->data) ;
+        carry = sum/ 10;
+        sum%=10;
+        ans->next = new Node(sum);
+        ans = ans->next;
+        head2 = head2->next;
+    }
+
+    while (carry != 0) {
+        int sum = carry;
+        carry = sum/ 10;
+        sum%=10;
+        ans->next = new Node(sum);
+        ans = ans->next;
+       
+    }
+
+    return sol->next;
+}
+
     //Function to add two numbers represented by linked list.
     struct Node* addTwoLists(struct Node* first, struct Node* second)
     {
         // code here
-        // reversing LL
-        first=reverse(first);
+        if(first==NULL) return second;
+        if(second==NULL) return first;
+        if(first->next==NULL && second->next==NULL ){
+            sumpart(first,second);
+
+        }
+        first= reverse(first);
         second=reverse(second);
-        
-        // add these 2 linked list
-        Node * ans= add(first,second);
-        
-        // reverse answer list
-        ans= reverse(ans);
-        return ans;
+        Node* ans= sumpart(first,second);
+        return reverse(ans);
     }
 };
+
 
 //{ Driver Code Starts.
 
