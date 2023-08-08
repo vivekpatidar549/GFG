@@ -8,13 +8,25 @@ using namespace std;
 class Solution
 {
     public:
-    int countFractions(int n, int num[], int den[])
+    int gcdof(int a, int b){
+        if(b==0) return a;
+        return gcdof(b,a%b);
+    }
+    int countFractions(int n, int numerator[], int denominator[])
     {
-        unordered_map<float,int> mp;
+        
         int ans=0;
+        map<pair<int,int> , int> mp;
         for(int i=0;i<n;i++){
-            if(mp.find((float) (den[i]-num[i])/den[i])!=mp.end()) ans+=mp[(float) (den[i]-num[i])/den[i]];
-            mp[(float) num[i]/den[i]]++;
+            int gcd= gcdof(numerator[i],denominator[i]);
+            int x= numerator[i]/=gcd;
+            int y= denominator[i]/=gcd;
+            int z= y-x;
+            if(mp.find({z,y})!=mp.end()){
+                ans+=mp[{z,y}];
+            }
+            mp[{numerator[i], denominator[i]}]++;
+            
         }
         return ans;
     }
